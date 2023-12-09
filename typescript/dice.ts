@@ -50,7 +50,7 @@ function createNewGame(): void {
     (<HTMLInputElement>document.getElementById("player1")).setAttribute("disabled", "disabled");
     (<HTMLInputElement>document.getElementById("player2")).setAttribute("disabled", "disabled");
 
-    // Continue your existing code...
+
 }
 
 function rollDie(): void {
