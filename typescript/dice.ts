@@ -66,3 +66,33 @@ function holdDie():void{
     //change players
     changePlayers();
 }
+
+class Player {
+    name: string;
+    score: number;
+
+    constructor(name: string) {
+        this.name = name;
+        this.score = 0;
+    }
+}
+
+class PigDiceGame {
+    players: Player[];
+    currentPlayerIndex: number;
+    currentTurnTotal: number;
+
+    constructor(player1: string, player2: string) {
+        this.players = [new Player(player1), new Player(player2)];
+        this.currentPlayerIndex = 0;
+        this.currentTurnTotal = 0;
+    }
+
+    getCurrentPlayer(): Player {
+        return this.players[this.currentPlayerIndex];
+    }
+
+    switchPlayer(): void {
+        this.currentPlayerIndex = 1 - this.currentPlayerIndex;
+    }
+}
