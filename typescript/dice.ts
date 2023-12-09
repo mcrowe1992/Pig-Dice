@@ -49,31 +49,59 @@ function createNewGame(): void {
 
 }
 
-function rollDie():void{
-    let currTotal = parseInt((<HTMLInputElement>document.getElementById("total")).value);
-    
-    //roll the die and get a random value 1 - 6 (use generateRandomValue function)
+function rollDie(): void {
+    const currentTotal = parseInt((<HTMLInputElement>document.getElementById("total")).value);
+    const game = getCurrentGame();
 
-    //if the roll is 1
-    //  change players
-    //  set current total to 0
-    
-    //if the roll is greater than 1
-    //  add roll value to current total
+    // Roll the die and get a random value 1 - 6
+    const rollValue = Math.floor(Math.random() * 6) + 1;
 
-    //set the die roll to value player rolled
-    //display current total on form
+    if (rollValue === 1) {
+        // If the roll is 1, change players and set current total to 0
+        game.currentTurnTotal = 0;
+        changePlayers();
+    } else {
+        // If the roll is greater than 1, add roll value to current total
+        game.currentTurnTotal += rollValue;
+    }
+
+    // Set the die roll to the value player rolled
+    (<HTMLInputElement>document.getElementById("die")).value = rollValue.toString();
+    
+    // Display current total on the form
+    (<HTMLInputElement>document.getElementById("total")).value = game.currentTurnTotal.toString();
 }
 
-function holdDie():void{
-    //get the current turn total
-    //determine who the current player is
-    //add the current turn total to the player's total score
+function holdDie(): void {
+    const game = getCurrentGame();
+    const currentPlayer = game.getCurrentPlayer();
 
-    //reset the turn total to 0
+    // Add the current turn total to the player's total score
+    currentPlayer.score += game.currentTurnTotal;
 
-    //change players
+    // Reset the turn total to 0
+    game.currentTurnTotal = 0;
+
+    // Change players
     changePlayers();
+
+    // Update scores on the form
+    updateScores();
+}
+
+function getCurrentGame(): PigDiceGame {
+    // Retrieve the game instance from the data attribute
+    return (<any>window).pigDiceGame;
+}
+
+function updateScores(): void {
+    const game = getCurrentGame();
+    const player1Score = <HTMLInputElement>document.getElementById("score1");
+    const player2Score = <HTMLInputElement>document.getElementById("score2");
+
+    // Update scores on the form
+    player1Score.value = game.players[0].score.toString();
+    player2Score.value = game.players[1].score.toString();
 }
 
 class Player {
