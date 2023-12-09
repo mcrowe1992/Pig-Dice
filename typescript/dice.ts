@@ -37,6 +37,9 @@ function createNewGame(): void {
     // Start the game with the entered player names
     const game = new PigDiceGame(player1Name, player2Name);
 
+    // Set the PigDiceGame instance as a data attribute
+    (<any>window).pigDiceGame = game;
+
     // Display the current player's turn
     const turnElement = <HTMLElement>document.getElementById("turn");
     turnElement.classList.add("open");
@@ -47,6 +50,7 @@ function createNewGame(): void {
     (<HTMLInputElement>document.getElementById("player1")).setAttribute("disabled", "disabled");
     (<HTMLInputElement>document.getElementById("player2")).setAttribute("disabled", "disabled");
 
+    // Continue your existing code...
 }
 
 function rollDie(): void {
