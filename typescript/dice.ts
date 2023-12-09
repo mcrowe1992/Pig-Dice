@@ -16,18 +16,22 @@ function changePlayers():void{
     //set currentPlayerName to the next player
 }
 
-window.onload = function(){
+
+window.onload = function () {
+    console.log("Window loaded.");
     let newGameBtn = document.getElementById("new_game") as HTMLButtonElement;
     newGameBtn.onclick = createNewGame;
 
-    (<HTMLButtonElement>document.getElementById("roll")).onclick = rollDie;
+};
 
-    (<HTMLButtonElement>document.getElementById("hold")).onclick = holdDie;
-}
 
 function createNewGame(): void {
-    const player1Name = (<HTMLInputElement>document.getElementById("player1")).value;
-    const player2Name = (<HTMLInputElement>document.getElementById("player2")).value;
+    console.log("Creating a new game...");
+    const player1Input = document.getElementById("player1") as HTMLInputElement;
+    const player2Input = document.getElementById("player2") as HTMLInputElement;
+
+    const player1Name = player1Input.value;
+    const player2Name = player2Input.value;
 
     if (!player1Name || !player2Name) {
         alert("Both players must have a name!");
@@ -38,26 +42,29 @@ function createNewGame(): void {
     const game = new PigDiceGame(player1Name, player2Name);
 
     // Set the PigDiceGame instance as a data attribute
-    (<any>window).pigDiceGame = game;
+    (window as any).pigDiceGame = game;
 
     // Display the current player's turn
-    const turnElement = <HTMLElement>document.getElementById("turn");
+    const turnElement = document.getElementById("turn") as HTMLElement;
     turnElement.classList.add("open");
-    const currentTurn = <HTMLElement>document.getElementById("current");
-    currentTurn.innerText = game.getCurrentPlayer().name;
 
     // Unlock player name inputs
-    (<HTMLInputElement>document.getElementById("player1")).removeAttribute("disabled");
-    (<HTMLInputElement>document.getElementById("player2")).removeAttribute("disabled");
+    player1Input.removeAttribute("disabled");
+    player2Input.removeAttribute("disabled");
 
     // Reset scores on the form
-    (<HTMLInputElement>document.getElementById("score1")).value = "0";
-    (<HTMLInputElement>document.getElementById("score2")).value = "0";
+    (document.getElementById("score1") as HTMLInputElement).value = "0";
+    (document.getElementById("score2") as HTMLInputElement).value = "0";
 
     // Reset current and die values on the form
-    (<HTMLInputElement>document.getElementById("total")).value = "0";
-    (<HTMLInputElement>document.getElementById("die")).value = "";
+    (document.getElementById("total") as HTMLInputElement).value = "0";
+    (document.getElementById("die") as HTMLInputElement).value = "";
 
+    // Set the initial player's turn
+    const currentTurn = document.getElementById("current") as HTMLElement;
+    currentTurn.innerText = game.getCurrentPlayer().name;
+
+    // Continue your existing code...
 }
 
 function rollDie(): void {
@@ -130,8 +137,8 @@ class PigDiceGame {
     currentPlayerIndex: number;
     currentTurnTotal: number;
 
-    constructor(player1: string, player2: string) {
-        this.players = [new Player(player1), new Player(player2)];
+    constructor(player1Name: string, player2Name: string) {
+        this.players = [new Player(player1Name), new Player(player2Name)];
         this.currentPlayerIndex = 0;
         this.currentTurnTotal = 0;
     }
@@ -142,5 +149,25 @@ class PigDiceGame {
 
     switchPlayer(): void {
         this.currentPlayerIndex = 1 - this.currentPlayerIndex;
+    }
+
+    rollDie(): number {
+        const rollValue = Math.floor(Math.random() * 6) + 1;
+
+        if (rollValue === 1) {
+            this.currentTurnTotal = 0;
+            this.switchPlayer();
+        } else {
+            this.currentTurnTotal += rollValue;
+        }
+
+        return rollValue;
+    }
+
+    holdDie(): void {
+        const currentPlayer = this.getCurrentPlayer();
+        currentPlayer.score += this.currentTurnTotal;
+        this.currentTurnTotal = 0;
+        this.switchPlayer();
     }
 }
