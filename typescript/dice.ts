@@ -25,19 +25,28 @@ window.onload = function(){
     (<HTMLButtonElement>document.getElementById("hold")).onclick = holdDie;
 }
 
-function createNewGame(){
-    //set player 1 and player 2 scores to 0
+function createNewGame(): void {
+    const player1Name = (<HTMLInputElement>document.getElementById("player1")).value;
+    const player2Name = (<HTMLInputElement>document.getElementById("player2")).value;
 
-    //verify each player has a name
-    //if both players don't have a name display error
+    if (!player1Name || !player2Name) {
+        alert("Both players must have a name!");
+        return;
+    }
 
-    //if both players do have a name start the game!
-    (<HTMLElement>document.getElementById("turn")).classList.add("open");
-    (<HTMLInputElement>document.getElementById("total")).value = "0";
-    //lock in player names and then change players
+    // Start the game with the entered player names
+    const game = new PigDiceGame(player1Name, player2Name);
+
+    // Display the current player's turn
+    const turnElement = <HTMLElement>document.getElementById("turn");
+    turnElement.classList.add("open");
+    const currentTurn = <HTMLElement>document.getElementById("current");
+    currentTurn.innerText = game.getCurrentPlayer().name;
+
+    // Lock in player names
     (<HTMLInputElement>document.getElementById("player1")).setAttribute("disabled", "disabled");
     (<HTMLInputElement>document.getElementById("player2")).setAttribute("disabled", "disabled");
-    changePlayers();
+
 }
 
 function rollDie():void{
