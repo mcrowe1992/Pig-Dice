@@ -46,10 +46,17 @@ function createNewGame(): void {
     const currentTurn = <HTMLElement>document.getElementById("current");
     currentTurn.innerText = game.getCurrentPlayer().name;
 
-    // Lock in player names
-    (<HTMLInputElement>document.getElementById("player1")).setAttribute("disabled", "disabled");
-    (<HTMLInputElement>document.getElementById("player2")).setAttribute("disabled", "disabled");
+    // Unlock player name inputs
+    (<HTMLInputElement>document.getElementById("player1")).removeAttribute("disabled");
+    (<HTMLInputElement>document.getElementById("player2")).removeAttribute("disabled");
 
+    // Reset scores on the form
+    (<HTMLInputElement>document.getElementById("score1")).value = "0";
+    (<HTMLInputElement>document.getElementById("score2")).value = "0";
+
+    // Reset current and die values on the form
+    (<HTMLInputElement>document.getElementById("total")).value = "0";
+    (<HTMLInputElement>document.getElementById("die")).value = "";
 
 }
 
