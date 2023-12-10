@@ -22,6 +22,9 @@ window.onload = function () {
     let newGameBtn = document.getElementById("new_game") as HTMLButtonElement;
     newGameBtn.onclick = createNewGame;
 
+    let rollBtn = document.getElementById("roll") as HTMLButtonElement;
+    rollBtn.onclick = rollDie;
+
 };
 
 
